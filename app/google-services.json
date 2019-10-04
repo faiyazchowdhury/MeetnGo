@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "395681110099",
+    "firebase_url": "https://meetngo-6b907.firebaseio.com",
+    "project_id": "meetngo-6b907",
+    "storage_bucket": "meetngo-6b907.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395681110099:android:34879333e94182a47f8ea6",
+        "android_client_info": {
+          "package_name": "com.example.meetngo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395681110099-7sheesqd4oe9pbs8h1ku341kqrjnm9eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.meetngo",
+            "certificate_hash": "2569fdfaee18a7e5439d74a400029a56a5add395"
+          }
+        },
+        {
+          "client_id": "395681110099-jl5n6bh6a57hpejq4to634rfd8edfdq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNjzoYPMMNWNOSB3e0S-cFocDr9xAqhH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395681110099-jl5n6bh6a57hpejq4to634rfd8edfdq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
