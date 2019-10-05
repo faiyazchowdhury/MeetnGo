@@ -73,6 +73,7 @@ public class login extends AppCompatActivity {
 
     protected void login1(final String email, String password){
         final Intent loginsuccess = new Intent(this, freeness.class);
+        final Intent settings = new Intent(this, com.example.meetngo.settings.class);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -83,9 +84,12 @@ public class login extends AppCompatActivity {
                     mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(!dataSnapshot.hasChild(add_user)){
-                                User u = new User(email);
-                                mDatabase.child("Users").child(add_user).setValue(u);
+                            if(!dataSnapshot.child(add_user).child("settings").hasChild("notifications")){
+                                Toast.makeText(login.this, "Please update your settings!", Toast.LENGTH_LONG).show();
+                                startActivity(settings);
+                            }
+                            else{
+                                startActivity(loginsuccess);
                             }
                         }
                         @Override
@@ -94,7 +98,7 @@ public class login extends AppCompatActivity {
                         }
                     });
 
-                    startActivity(loginsuccess);
+
                 }
                 else{
                     Toast.makeText(login.this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
