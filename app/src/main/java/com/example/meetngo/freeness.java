@@ -36,6 +36,7 @@ public class freeness extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         final String w_email = mAuth.getCurrentUser().getEmail().toString();
         setContentView(R.layout.activity_freeness);
+        getValuesFromDatabase(w_email);
         final Intent i4 = new Intent(this, groups.class);
         final Intent settings_intent = new Intent(this, settings.class);
         Button next = findViewById(R.id.next);
@@ -67,7 +68,7 @@ public class freeness extends AppCompatActivity {
             }
         });
 
-        SeekBar distance = findViewById(R.id.distance);
+        final SeekBar distance = findViewById(R.id.distance);
         SeekBar duration = findViewById(R.id.duration);
 
 
@@ -75,7 +76,6 @@ public class freeness extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 final_distance = i;
-                Toast.makeText(freeness.this, "The set distance is "+i, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -85,7 +85,7 @@ public class freeness extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                Toast.makeText(freeness.this, "The set distance is "+final_distance+" minutes of walk", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -93,7 +93,7 @@ public class freeness extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 final_duration = i;
-                Toast.makeText(freeness.this, "The set duration is "+i, Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -103,7 +103,8 @@ public class freeness extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                distance.setMax(final_duration);
+                Toast.makeText(freeness.this, "The set duration is "+final_duration+" minutes", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,6 +145,46 @@ public class freeness extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getValuesFromDatabase(String email){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String add_user = returnUsername(email);
+        mDatabase.child("Users").child(add_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(((Long) dataSnapshot.child("freeness").getValue()).intValue() != -1){
+                    if(((Long) dataSnapshot.child("freeness").getValue()).intValue() == 1){
+                        Switch free = findViewById(R.id.freeness);
+                        free.setChecked(true);
+                    }
+                    else{
+                        Switch free = findViewById(R.id.freeness);
+                        free.setChecked(false);
+                    }
+                }
+
+                if(((Long) dataSnapshot.child("duration").getValue()).intValue() != -1){
+                    SeekBar duration = findViewById(R.id.duration);
+                    duration.setProgress(((Long) dataSnapshot.child("duration").getValue()).intValue());
+                }
+
+                if(((Long) dataSnapshot.child("distance").getValue()).intValue() != -1){
+                    SeekBar duration = findViewById(R.id.distance);
+                    duration.setProgress(((Long) dataSnapshot.child("distance").getValue()).intValue());
+                }
+
+                if(!dataSnapshot.child("message").getValue().toString().isEmpty()){
+                    EditText message = findViewById(R.id.message);
+                    message.setText(dataSnapshot.child("message").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
