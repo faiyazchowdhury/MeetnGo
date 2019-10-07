@@ -8,8 +8,8 @@
 
     <ListView
         android:id="@+id/contactsinphone"
-        android:layout_width="388dp"
-        android:layout_height="377dp"
+        android:layout_width="389dp"
+        android:layout_height="342dp"
         android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
         android:layout_marginTop="189dp"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginLeft="160dp"
-        android:layout_marginTop="608dp"
+        android:layout_marginTop="552dp"
         android:text="Confirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
