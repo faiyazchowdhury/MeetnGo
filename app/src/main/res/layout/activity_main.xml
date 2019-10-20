@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/default_layout"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/letzchill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginLeft="108dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginTop="188dp"
         android:text="LetzChill"
-        android:textColor="#87CEEB"
+        android:textColor="#1e88e5"
         android:textSize="50sp"
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="100dp"
         android:text="Welcome"
         android:textSize="50sp"
         app:layout_constraintStart_toStartOf="parent"

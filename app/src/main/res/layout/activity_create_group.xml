@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/default_layout"
     tools:context=".create_group">
 
     <TextView
@@ -15,6 +16,8 @@
         android:layout_marginTop="108dp"
         android:text="Enter group name"
         android:textSize="35sp"
+
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +31,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="group name"
+        android:background="@drawable/round_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +43,7 @@
         android:layout_marginLeft="161dp"
         android:layout_marginTop="312dp"
         android:text="Next"
+        android:background="@drawable/square_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

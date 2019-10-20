@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/default_layout"
     tools:context=".select_groups">
 
     <TextView
@@ -37,6 +38,7 @@
         android:layout_marginLeft="160dp"
         android:layout_marginTop="512dp"
         android:text="Done"
+        android:background="@drawable/square_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
