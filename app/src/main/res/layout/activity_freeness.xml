@@ -70,7 +70,7 @@
         android:layout_marginLeft="196dp"
         android:layout_marginTop="284dp"
         android:max="300"
-        android:min="30"
+        android:min="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

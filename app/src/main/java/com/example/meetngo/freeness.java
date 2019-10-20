@@ -54,6 +54,7 @@ public class freeness extends AppCompatActivity {
                 String m = message.getText().toString();
 
                 sendValuesToDatabase(mAuth.getCurrentUser().getEmail().toString(), final_distance, final_duration, f, m);
+                i4.putExtra("timeRemaining", final_duration);
                 startActivity(i4);
             }
         });

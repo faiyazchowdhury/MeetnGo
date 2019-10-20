@@ -39,6 +39,8 @@ public class select_groups extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_groups);
+        Intent duration_intent = getIntent();
+        final int timeRemaining = duration_intent.getIntExtra("timeRemaining", 1);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String email = mAuth.getCurrentUser().getEmail().toString();
@@ -123,6 +125,7 @@ public class select_groups extends AppCompatActivity {
 
                         }
                     });
+                    i1.putExtra("timeRemaining", timeRemaining);
                     startActivity(i1);
                 }
                 else{

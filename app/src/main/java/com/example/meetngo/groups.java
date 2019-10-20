@@ -39,6 +39,8 @@ public class groups extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent duration_intent = getIntent();
+        final int timeRemaining = duration_intent.getIntExtra("timeRemaining",1);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final Intent cig = new Intent(this, com.example.meetngo.contacts_in_group.class);
@@ -102,6 +104,7 @@ public class groups extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!arrayList.get(0).equals("You don't have any groups yet!")) {
+                    i2.putExtra("timeRemaining", timeRemaining);
                     startActivity(i2);
                 }
                 else{
