@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +39,8 @@ public class select_groups extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_groups);
+        Intent duration_intent = getIntent();
+        final int timeRemaining = duration_intent.getIntExtra("timeRemaining", 1);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String email = mAuth.getCurrentUser().getEmail().toString();
@@ -75,40 +78,59 @@ public class select_groups extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.child("Notifications").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChildren()){
-                            int i = ((Long) dataSnapshot.child("num").getValue()).intValue();
-                            mDatabase.child("Notifications").child("num").setValue(i+1);
-                            mDatabase.child("Notifications").child("n"+(i+1)).child("sender").setValue(add_user);
-                            Date currentTime = Calendar.getInstance().getTime();
-                            mDatabase.child("Notifications").child("n"+(i+1)).child("time").setValue(currentTime);
-                            for(int j=0;j<selected_groups.size();j++){
-                                mDatabase.child("Notifications").child("n"+(i+1)).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                if(!selected_groups.isEmpty()) {
+                    mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.child("Notifications").hasChildren()) {
+                                int i = ((Long) dataSnapshot.child("Notifications").child("num").getValue()).intValue();
+                                int duration = ((Long) dataSnapshot.child("Users").child(add_user).child("duration").getValue()).intValue();
+                                int distance = ((Long) dataSnapshot.child("Users").child(add_user).child("distance").getValue()).intValue();
+                                String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
+                                mDatabase.child("Notifications").child("num").setValue(i + 1);
+                                mDatabase.child("Notifications").child("n" + (i + 1)).child("sender").setValue(add_user);
+
+                                mDatabase.child("Notifications").child("n" + (i + 1)).child("distance").setValue(distance);
+                                mDatabase.child("Notifications").child("n" + (i + 1)).child("duration").setValue(duration);
+                                mDatabase.child("Notifications").child("n" + (i + 1)).child("message").setValue(message);
+
+                                Date currentTime = Calendar.getInstance().getTime();
+                                mDatabase.child("Notifications").child("n" + (i + 1)).child("time").setValue(currentTime);
+                                for (int j = 0; j < selected_groups.size(); j++) {
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                                }
+                            } else {
+                                int i = 1;
+                                int duration = ((Long) dataSnapshot.child("Users").child(add_user).child("duration").getValue()).intValue();
+                                int distance = ((Long) dataSnapshot.child("Users").child(add_user).child("distance").getValue()).intValue();
+                                String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
+                                mDatabase.child("Notifications").child("num").setValue(i);
+                                mDatabase.child("Notifications").child("n" + i).child("sender").setValue(add_user);
+
+                                mDatabase.child("Notifications").child("n" + i).child("distance").setValue(distance);
+                                mDatabase.child("Notifications").child("n" + i).child("duration").setValue(duration);
+                                mDatabase.child("Notifications").child("n" + i).child("message").setValue(message);
+
+                                Date currentTime = Calendar.getInstance().getTime();
+                                mDatabase.child("Notifications").child("n" + i).child("time").setValue(currentTime);
+                                for (int j = 0; j < selected_groups.size(); j++) {
+                                    mDatabase.child("Notifications").child("n" + i).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                                }
+
                             }
                         }
-                        else{
-                            int i = 1;
-                            mDatabase.child("Notifications").child("num").setValue(i);
-                            mDatabase.child("Notifications").child("n"+i).child("sender").setValue(add_user);
-                            Date currentTime = Calendar.getInstance().getTime();
-                            mDatabase.child("Notifications").child("n"+i).child("time").setValue(currentTime);
-                            for(int j=0;j<selected_groups.size();j++){
-                                mDatabase.child("Notifications").child("n"+i).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
-                            }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-                startActivity(i1);
-
+                    });
+                    i1.putExtra("timeRemaining", timeRemaining);
+                    startActivity(i1);
+                }
+                else{
+                    Toast.makeText(select_groups.this, "Please select atleast 1 group!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

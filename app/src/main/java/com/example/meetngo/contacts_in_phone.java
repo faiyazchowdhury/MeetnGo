@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,9 +34,12 @@ public class contacts_in_phone extends AppCompatActivity {
 
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> number = new ArrayList<>();
+    final ArrayList<String> selected_name = new ArrayList<>();
+    final ArrayList<String> selected_number = new ArrayList<>();
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
     String gn;
+    private ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,19 @@ public class contacts_in_phone extends AppCompatActivity {
         gn = cip.getStringExtra("group_name");
         TextView g_name = findViewById(R.id.group_name);
         g_name.setText(gn);
+        SearchView sfilter = findViewById(R.id.searchFilter);
+        sfilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                (contacts_in_phone.this).adapter.getFilter().filter(s);
+                return false;
+            }
+        });
         fp_get_Android_Contacts();
 
     }
@@ -111,17 +128,16 @@ public class contacts_in_phone extends AppCompatActivity {
                 name.add(arrayList_Android_Contacts.get(i).android_contact_Name);
                 number.add(arrayList_Android_Contacts.get(i).android_contact_TelefonNr);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
             ac.setAdapter(adapter);
 //</ show results >
 
-            final ArrayList<String> selected_name = new ArrayList<>();
-            final ArrayList<String> selected_number = new ArrayList<>();
+
             ac.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    selected_name.add(name.get(i));
-                    selected_number.add(sanitizeNumber(number.get(i)));
+                    selected_name.add(adapter.getItem(i).toString());
+                    selected_number.add(sanitizeNumber(number.get(name.indexOf(adapter.getItem(i).toString()))));
                 }
             });
 
@@ -150,7 +166,7 @@ public class contacts_in_phone extends AppCompatActivity {
     }
 
     private String sanitizeNumber(String number){
-        String s_number = number.replaceAll("[\\+ \\-]", "");
+        String s_number = number.replaceAll("[\\+ \\- \\( \\)]", "");
         return s_number;
     }
 
