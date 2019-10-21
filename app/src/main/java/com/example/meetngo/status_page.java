@@ -47,6 +47,7 @@ public class status_page extends AppCompatActivity {
             }
         });
         startLocationService(1);
+        startQueryService(1);
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -88,6 +89,22 @@ public class status_page extends AppCompatActivity {
             else{
                 stopService(serviceIntent);
             }
+    }
+
+    private void startQueryService(int flag){
+        Intent serviceIntent1 = new Intent(this, QueryService.class);
+        if(flag == 1) {
+            serviceIntent1.putExtra("timeRemaining", timeRemaining);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                status_page.this.startForegroundService(serviceIntent1);
+            } else {
+                startService(serviceIntent1);
+            }
+        }
+        else{
+            stopService(serviceIntent1);
+        }
     }
 
     public String returnUsername(String email){

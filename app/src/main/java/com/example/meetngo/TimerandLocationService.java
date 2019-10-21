@@ -70,6 +70,7 @@ public class TimerandLocationService extends Service {
 
     public static final String COUNTDOWN_BR = "com.example.meetngo.countdown_br";
     Intent bi = new Intent(COUNTDOWN_BR);
+    public String notif_no;
 
     @Override
     @Nullable
@@ -107,6 +108,8 @@ public class TimerandLocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startID){
         timeRemaining = intent.getIntExtra("timeRemaining",1);
+        //notif_no = intent.getStringExtra("notif_num");
+        //Toast.makeText(this, notif_no, Toast.LENGTH_SHORT).show();
         countDownTimer = new CountDownTimer(timeRemaining*60*1000, 1000) {
             @Override
             public void onTick(long l) {
@@ -114,6 +117,7 @@ public class TimerandLocationService extends Service {
                 bi.putExtra("countdown", l);
                 sendBroadcast(bi);
                 mDatabase.child("Users").child(add_user).child("duration").setValue(timeRemaining);
+                //mDatabase.child("Notifications").child(notif_no).child("duration").setValue(timeRemaining);
             }
 
             @Override
@@ -166,6 +170,8 @@ public class TimerandLocationService extends Service {
                         if (location != null) {
                             mDatabase.child("Users").child(add_user).child("location").child("latitude").setValue(location.getLatitude());
                             mDatabase.child("Users").child(add_user).child("location").child("longitude").setValue(location.getLongitude());
+                            //mDatabase.child("Notifications").child(notif_no).child("location").child("latitude").setValue(location.getLatitude());
+                            //mDatabase.child("Users").child(notif_no).child("location").child("longitude").setValue(location.getLongitude());
                         }
                     }
                 },

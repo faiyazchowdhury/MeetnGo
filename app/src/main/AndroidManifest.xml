@@ -53,6 +53,7 @@
             </intent-filter>
         </activity>
         <service android:name=".TimerandLocationService"/>
+        <service android:name=".QueryService"/>
     </application>
 
 </manifest>
