@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="portrait"
+    android:background="@drawable/default_layout"
     tools:context=".status_page">
 
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="208dp"
-        android:text="Time you're free for"
+        android:layout_marginStart="112dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginTop="212dp"
+        android:text="You're free for"
         android:textAlignment="center"
-        android:textSize="25sp"
+
+        android:textSize="30sp"
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,6 +43,7 @@
         android:layout_marginLeft="160dp"
         android:layout_marginTop="392dp"
         android:text="Edit"
+        android:background="@drawable/square_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
