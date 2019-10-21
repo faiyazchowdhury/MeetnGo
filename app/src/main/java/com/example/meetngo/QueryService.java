@@ -113,7 +113,7 @@ public class QueryService extends Service {
                             .setContentTitle("Some of your friends are free!")
                             .setContentText("Free friends are : "+message).build();
 
-                    
+
                 }
 
 
