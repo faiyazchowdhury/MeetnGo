@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class login extends AppCompatActivity {
-
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     @Override
