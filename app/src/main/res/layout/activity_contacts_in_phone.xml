@@ -70,6 +70,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="135dp"
         android:queryHint="Search"
+        android:background="@drawable/round_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

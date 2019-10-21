@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,7 @@ public class select_groups extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<Object> members = new ArrayList<>();
     private ArrayList<Object> selected_members = new ArrayList<>();
+    public String notif_n;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,21 +85,57 @@ public class select_groups extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child("Notifications").hasChildren()) {
-                                int i = ((Long) dataSnapshot.child("Notifications").child("num").getValue()).intValue();
-                                int duration = ((Long) dataSnapshot.child("Users").child(add_user).child("duration").getValue()).intValue();
-                                int distance = ((Long) dataSnapshot.child("Users").child(add_user).child("distance").getValue()).intValue();
-                                String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
-                                mDatabase.child("Notifications").child("num").setValue(i + 1);
-                                mDatabase.child("Notifications").child("n" + (i + 1)).child("sender").setValue(add_user);
+                                HashMap<String, Object> notifs = (HashMap<String, Object>) dataSnapshot.child("Notifications").getValue();
+                                int flag = 1;
+                                for(Map.Entry<String, Object> entry : notifs.entrySet()){
+                                    try {
+                                        HashMap<String, Object> n = (HashMap<String, Object>) entry.getValue();
+                                        if (n.get("sender").equals(add_user)) {
 
-                                mDatabase.child("Notifications").child("n" + (i + 1)).child("distance").setValue(distance);
-                                mDatabase.child("Notifications").child("n" + (i + 1)).child("duration").setValue(duration);
-                                mDatabase.child("Notifications").child("n" + (i + 1)).child("message").setValue(message);
+                                            int duration = ((Long) dataSnapshot.child("Users").child(add_user).child("duration").getValue()).intValue();
+                                            int distance = ((Long) dataSnapshot.child("Users").child(add_user).child("distance").getValue()).intValue();
+                                            String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("sender").setValue(add_user);
 
-                                Date currentTime = Calendar.getInstance().getTime();
-                                mDatabase.child("Notifications").child("n" + (i + 1)).child("time").setValue(currentTime);
-                                for (int j = 0; j < selected_groups.size(); j++) {
-                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("distance").setValue(distance);
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("duration").setValue(duration);
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("message").setValue(message);
+
+                                            Date currentTime = Calendar.getInstance().getTime();
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("time").setValue(currentTime);
+                                            mDatabase.child("Notifications").child(entry.getKey()).child("groups").removeValue();
+                                            for (int j = 0; j < selected_groups.size(); j++) {
+                                                mDatabase.child("Notifications").child(entry.getKey()).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                                            }
+                                            flag = 0;
+                                            notif_n = entry.getKey();
+
+                                        }
+                                    }
+                                    catch (Exception e){
+                                        Log.i("Exception", e.getMessage());
+                                    }
+
+                                }
+                                if(flag == 1) {
+                                    int i = ((Long) dataSnapshot.child("Notifications").child("num").getValue()).intValue();
+                                    int duration = ((Long) dataSnapshot.child("Users").child(add_user).child("duration").getValue()).intValue();
+                                    int distance = ((Long) dataSnapshot.child("Users").child(add_user).child("distance").getValue()).intValue();
+                                    String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
+                                    mDatabase.child("Notifications").child("num").setValue(i + 1);
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("sender").setValue(add_user);
+
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("distance").setValue(distance);
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("duration").setValue(duration);
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("message").setValue(message);
+
+                                    Date currentTime = Calendar.getInstance().getTime();
+                                    mDatabase.child("Notifications").child("n" + (i + 1)).child("time").setValue(currentTime);
+                                    for (int j = 0; j < selected_groups.size(); j++) {
+                                        mDatabase.child("Notifications").child("n" + (i + 1)).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
+                                    }
+                                    notif_n = "n"+(i+1);
+
                                 }
                             } else {
                                 int i = 1;
@@ -116,6 +154,7 @@ public class select_groups extends AppCompatActivity {
                                 for (int j = 0; j < selected_groups.size(); j++) {
                                     mDatabase.child("Notifications").child("n" + i).child("groups").child(selected_groups.get(j)).setValue(selected_members.get(j));
                                 }
+                                notif_n = "n"+i;
 
                             }
                         }
@@ -126,6 +165,7 @@ public class select_groups extends AppCompatActivity {
                         }
                     });
                     i1.putExtra("timeRemaining", timeRemaining);
+                    //i1.putExtra("notif_num", notif_n);
                     startActivity(i1);
                 }
                 else{
