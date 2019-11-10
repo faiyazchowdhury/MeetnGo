@@ -39,6 +39,7 @@ public class freeness extends AppCompatActivity {
         getValuesFromDatabase(w_email);
         final Intent i4 = new Intent(this, groups.class);
         final Intent settings_intent = new Intent(this, settings.class);
+
         Button next = findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +60,7 @@ public class freeness extends AppCompatActivity {
             }
         });
         TextView w_email1 = findViewById(R.id.w_email);
-        w_email1.setText(w_email);
+        w_email1.setText("Hi, "+returnUsername(w_email));
 
         TextView settings = findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +87,9 @@ public class freeness extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(freeness.this, "The set distance is "+final_distance+" minutes of walk", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(freeness.this, "The set distance is "+final_distance+" minutes of walk", Toast.LENGTH_SHORT).show();
+                TextView dist_textview = findViewById(R.id.distance_textview);
+                dist_textview.setText(String.valueOf(final_distance));
             }
         });
 
@@ -105,7 +108,9 @@ public class freeness extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 distance.setMax(final_duration);
-                Toast.makeText(freeness.this, "The set duration is "+final_duration+" minutes", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(freeness.this, "The set duration is "+final_duration+" minutes", Toast.LENGTH_SHORT).show();
+                TextView dur_textview = (TextView) findViewById(R.id.duration_textview);
+                dur_textview.setText(String.valueOf(final_duration));
             }
         });
 
@@ -168,11 +173,15 @@ public class freeness extends AppCompatActivity {
                 if(((Long) dataSnapshot.child("duration").getValue()).intValue() != -1){
                     SeekBar duration = findViewById(R.id.duration);
                     duration.setProgress(((Long) dataSnapshot.child("duration").getValue()).intValue());
+                    TextView dur_textview = (TextView) findViewById(R.id.duration_textview);
+                    dur_textview.setText(String.valueOf(final_duration));
                 }
 
                 if(((Long) dataSnapshot.child("distance").getValue()).intValue() != -1){
                     SeekBar duration = findViewById(R.id.distance);
                     duration.setProgress(((Long) dataSnapshot.child("distance").getValue()).intValue());
+                    TextView dist_textview = findViewById(R.id.distance_textview);
+                    dist_textview.setText(String.valueOf(final_distance));
                 }
 
                 if(!dataSnapshot.child("message").getValue().toString().isEmpty()){

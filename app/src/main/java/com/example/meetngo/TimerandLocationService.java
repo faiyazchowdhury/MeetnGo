@@ -107,7 +107,7 @@ public class TimerandLocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startID){
-        timeRemaining = intent.getIntExtra("timeRemaining",1);
+        timeRemaining = intent.getIntExtra("timeRemaining",30);
         //notif_no = intent.getStringExtra("notif_num");
         //Toast.makeText(this, notif_no, Toast.LENGTH_SHORT).show();
         countDownTimer = new CountDownTimer(timeRemaining*60*1000, 1000) {

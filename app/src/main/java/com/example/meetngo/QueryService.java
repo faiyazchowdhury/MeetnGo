@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +52,7 @@ public class QueryService extends Service {
         add_user = returnUsername(email);
 
         if (Build.VERSION.SDK_INT >= 26) {
-            String CHANNEL_ID = "my_channel_01";
+            String CHANNEL_ID = "my_channel_02";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "My Channel",
                     NotificationManager.IMPORTANCE_DEFAULT);
@@ -62,7 +63,7 @@ public class QueryService extends Service {
                     .setContentTitle("")
                     .setContentText("").build();
 
-            startForeground(1, notification);
+            startForeground(2, notification);
         }
 
     }
@@ -74,17 +75,40 @@ public class QueryService extends Service {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 HashMap<String, Object> n = (HashMap<String, Object>) dataSnapshot.child("Notifications").getValue();
+                HashMap<String, Object> users = (HashMap<String, Object>) dataSnapshot.child("Users").getValue();
                 for(Map.Entry<String, Object> entry : n.entrySet()){
                     try {
                         HashMap<String, Object> notifs = (HashMap<String, Object>) entry.getValue();
                         if(notifs.get("sender").equals(add_user)){
-                             HashMap<String, Object> groups = (HashMap<String, Object>) notifs.get("groups");
-                             for(Map.Entry<String, Object> entry1 : groups.entrySet()){
-                                 HashMap<String, Object> g1 = (HashMap<String, Object>) entry1.getValue();
-                                 for(Map.Entry<String, Object> entry2 : g1.entrySet()){
-                                     free_friends.add(entry2.getKey());
+                             HashMap<String, Object> receivers = (HashMap<String, Object>) notifs.get("receivers");
+                             for(Map.Entry<String, Object> entry2 : receivers.entrySet()){
+                                 if(!free_friends.contains(entry2.getKey())){
+                                     for(Map.Entry<String, Object> entry3 : users.entrySet()){
+                                         HashMap<String, Object> attributes = (HashMap<String, Object>) entry3.getValue();
+                                         if(attributes.get("phone").equals(entry2.getValue())){
+                                             if(attributes.get("freeness").equals((long) 1)){
+                                                 free_friends.add(entry2.getKey());
+                                             }
+                                             else{
+                                                 if(free_friends.contains(entry2.getKey())){
+                                                     free_friends.remove(entry2.getKey());
+                                                 }
+                                             }
+                                         }
+                                     }
+
                                  }
                              }
+                        }
+
+                        HashMap<String, Object> receivers = (HashMap<String, Object>) notifs.get("receivers");
+                        String my_phone = (String) dataSnapshot.child("Users").child(add_user).child("phone").getValue();
+                        for(Map.Entry<String, Object> receiver : receivers.entrySet()){
+                            if(my_phone.equals(receiver.getValue().toString())){
+                                if(!free_friends.contains(notifs.get("sender").toString()) && dataSnapshot.child("Users").child(add_user).child("freeness").getValue().toString().equals("1")) {
+                                    free_friends.add(notifs.get("sender").toString());
+                                }
+                            }
                         }
                     }
                     catch(Exception e){
@@ -92,31 +116,43 @@ public class QueryService extends Service {
                     }
                 }
 
-                String message = "";
-                for(int i=0;i<free_friends.size();i++){
-                    if(i == 0){
-                        message = message + free_friends.get(i);
+                if(!free_friends.isEmpty()) {
+                    String message = "";
+                    for (int i = 0; i < free_friends.size(); i++) {
+                        if (i == 0) {
+                            message = message + free_friends.get(i);
+                        } else {
+                            message = message + ", " + free_friends.get(i);
+                        }
                     }
-                    else{
-                        message = message + ", " + free_friends.get(i);
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        String CHANNEL_ID = "my_channel_03";
+                        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                                "My Channel",
+                                NotificationManager.IMPORTANCE_HIGH);
+
+                        /*Intent intent = new Intent(getApplicationContext(), notification_tap.class);
+                        intent.putStringArrayListExtra("free_friends", free_friends);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);*/
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                                .setSmallIcon(R.drawable.ic_launcher_background)
+                                .setContentTitle("Some of your friends are free!!")
+                                .setContentText(message)
+                                //.setContentIntent(pendingIntent)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                        notificationManager.createNotificationChannel(channel);
+
+                        NotificationManagerCompat notificationManager1 = NotificationManagerCompat.from(getApplicationContext());
+
+// notificationId is a unique int for each notification that you must define
+                        notificationManager1.notify(1, builder.build());
                     }
-                }
-                if (Build.VERSION.SDK_INT >= 26) {
-                    String CHANNEL_ID = "my_channel_02";
-                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                            "My Channel",
-                            NotificationManager.IMPORTANCE_DEFAULT);
-
-                    ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                            .setContentTitle("Some of your friends are free!")
-                            .setContentText("Free friends are : "+message).build();
-
 
                 }
-
-
                 onDestroy();
             }
 

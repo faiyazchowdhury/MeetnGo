@@ -44,6 +44,7 @@ public class status_page extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(home);
                 startLocationService(0);
+                startQueryService(0);
             }
         });
         startLocationService(1);
@@ -72,7 +73,8 @@ public class status_page extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        unregisterReceiver(br);
+        //registerReceiver(br, new IntentFilter(TimerandLocationService.COUNTDOWN_BR));
+        //unregisterReceiver(br);
     }
 
     private void startLocationService(int flag){
@@ -125,7 +127,7 @@ public class status_page extends AppCompatActivity {
             TextView timer = findViewById(R.id.timer);
             int minutes = ((int) millisUntilFinished / 1000) / 60;
             int seconds = ((int) millisUntilFinished / 1000) - 60*minutes;
-            timer.setText(minutes + " : " + seconds);
+            timer.setText(String.valueOf(minutes) + " : " + String.valueOf(seconds));
             if(minutes == 0 && seconds == 0){
                 Toast.makeText(this, "You're freeness duration has expired", Toast.LENGTH_SHORT).show();
                 startActivity(home);
