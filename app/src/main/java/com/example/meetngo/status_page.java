@@ -19,6 +19,9 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -66,14 +69,14 @@ public class status_page extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("freeness").getValue().toString().equals("1")){ // If Free
                     Button edit = findViewById(R.id.Edit);
-                    edit.setText("Not free anymore");
+                    edit.setText("NOT FREE ANYMORE");
                     startLocationService(1);
                 }
                 else{ // If not free
                     Button edit = findViewById(R.id.Edit);
-                    edit.setText("Send Blast");
+                    edit.setText("SEND A BLAST");
                     TextView timer = findViewById(R.id.timer);
-                    timer.setText( "Send a Blast to let friends know you are free." );
+                    timer.setText( "SEND A BLAST to let friends know you are free." );
                 }
             }
 
@@ -92,15 +95,19 @@ public class status_page extends AppCompatActivity {
                             startLocationService(0);
                             mDatabase.child("Users").child(returnUsername(email)).child("freeness").setValue(0);
                             Button edit = findViewById(R.id.Edit);
-                            edit.setText("Send Blast");
+                            edit.setText("SEND A BLAST");
                             TextView timer = findViewById(R.id.timer);
-                            timer.setText( "Send a Blast to let friends in groups know you are free." );
+                            timer.setText( "SEND A BLAST to let friends in groups know you are free." );
                         } if(!dataSnapshot.child("groups").hasChildren()) {
-                            Toast.makeText(status_page.this, "Please add a group in the Groups tab.", Toast.LENGTH_SHORT).show();// Send blast
-
+                            Toast.makeText(status_page.this, "Please add a group with the Groups button.", Toast.LENGTH_SHORT).show();// Send blast
+                          //  final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
+                          //  Button groups_button = (Button) findViewById(R.id.groups);
+                          //  groups_button.startAnimation(animShake);
                         } else  { // Send Blast
                             startQueryService(0);
-                            startActivity(select_groups);
+                            if(dataSnapshot.child("freeness").getValue().toString().equals("0")) { // If Free (Not free Anymore){
+                                startActivity(select_groups);
+                            }
                         }
                     }
 
@@ -120,16 +127,8 @@ public class status_page extends AppCompatActivity {
                 startActivity(groups_intent);
             }
         });
-        TextView groupsBorder = findViewById(R.id.groups);
-        groupsBorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(groups_intent);
-            }
-        });
 
         startQueryService(1);
-
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -235,7 +234,7 @@ public class status_page extends AppCompatActivity {
         ArrayList<String> temp_free_friends = new ArrayList<>();
         temp_free_friends = intent.getStringArrayListExtra("free_friends");
         if(temp_free_friends.size() == 0){
-            String message = "Oh no! No one else is free! Please spread the word about the app! You can still Send a Blast, and the chosen groups will be notified if their No Distractions setting is off. You can add groups in the Groups tab below.";
+            String message = "Oh no! No one else is free! Please spread the word about the app! You can still SEND A BLAST, and the chosen groups will be notified if their No Distractions setting is off. You can add groups in the Groups button above.";
             if(!free_friends.contains(message)){
                 free_friends.add(message);
             }

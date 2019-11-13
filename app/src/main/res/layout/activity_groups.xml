@@ -44,10 +44,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/Edit"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginLeft="168dp"
+        android:layout_marginTop="516dp"
+        android:background="@drawable/round_input"
+        android:text="Send a Blast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/newgroup"
         android:layout_width="35dp"
         android:layout_height="35dp"
-
         android:layout_marginStart="360dp"
         android:layout_marginLeft="360dp"
         android:layout_marginTop="8dp"
@@ -59,59 +70,38 @@
 
     <ListView
         android:id="@+id/groups"
-        android:layout_width="382dp"
-        android:layout_height="410dp"
+        android:layout_width="397dp"
+        android:layout_height="407dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="84dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/letzChillBorder"
-        android:layout_width="207dp"
-        android:layout_height="66dp"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="638dp"
-        android:background="@drawable/square_tab_chosen"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/groupsBorder"
-        android:layout_width="207dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="638dp"
-        android:layout_marginStart="207dp"
-        android:layout_marginLeft="207dp"
-        android:background="@drawable/square_tab_chosen"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/letzChill"
+        android:id="@+id/home"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="645dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="516dp"
         android:background="@drawable/logo_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/groupsTab"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="276dp"
-        android:layout_marginLeft="276dp"
-        android:layout_marginTop="645dp"
-        android:background="@drawable/groups_icon"
+    <TextView
+        android:id="@+id/home_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="564dp"
+        android:text="Home"
+
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@ public class groups extends AppCompatActivity {
             }
         });
 
-        String email = mAuth.getCurrentUser().getEmail().toString();
+        final String email = mAuth.getCurrentUser().getEmail().toString();
         final String add_user = returnUsername(email);
         mDatabase.child("Users").child(add_user).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -83,11 +83,51 @@ public class groups extends AppCompatActivity {
                     arrayList.add(message);
                     arrayAdapter.notifyDataSetChanged();
                 }
+
+               // Button edit = findViewById(R.id.Edit);
+               // if(dataSnapshot.child("freeness").getValue().toString().equals("1")){ // If Free
+               //     edit.setText("NOT FREE ANYMORE");
+               // }
+               // else{ // If not free
+               //     edit.setText("SEND A BLAST");
+               // }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        final Intent select_groups = new Intent(this, select_groups.class);
+        Button edit = findViewById(R.id.Edit);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.child("Users").child(returnUsername(email)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.child("freeness").getValue().toString().equals("1")){ // If Free (Not free Anymore)
+                            mDatabase.child("Users").child(returnUsername(email)).child("freeness").setValue(0);
+                            Button edit = findViewById(R.id.Edit);
+                            edit.setText("SEND A BLAST");
+                        } if(!dataSnapshot.child("groups").hasChildren()) {
+                            Toast.makeText(groups.this, "Please add a group with the Add button.", Toast.LENGTH_SHORT).show();// Send blast
+                            //  final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
+                            //  Button groups_button = (Button) findViewById(R.id.groups);
+                            //  groups_button.startAnimation(animShake);
+                        } else  { // Send Blast
+                            if(dataSnapshot.child("freeness").getValue().toString().equals("0")) { // If Free (Not free Anymore){
+                                startActivity(select_groups);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
@@ -101,20 +141,14 @@ public class groups extends AppCompatActivity {
         });
 
         final Intent status_page_intent = new Intent(this, status_page.class);
-        TextView letzChill = findViewById(R.id.letzChill);
-        letzChill.setOnClickListener(new View.OnClickListener() {
+        TextView home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(status_page_intent);
             }
         });
-        TextView letzChillBorder = findViewById(R.id.letzChillBorder);
-        letzChillBorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(status_page_intent);
-            }
-        });
+
     }
 
     public String returnUsername(String email){
