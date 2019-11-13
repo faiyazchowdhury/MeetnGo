@@ -152,6 +152,7 @@ public class select_groups extends AppCompatActivity {
 
                         }
                     });
+                    mDatabase.child("Users").child(add_user).child("freeness").setValue(1);
                     i1.putExtra("timeRemaining", timeRemaining);
                     startActivity(i1);
                 }

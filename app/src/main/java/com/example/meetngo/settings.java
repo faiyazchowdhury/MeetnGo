@@ -67,6 +67,53 @@ public class settings extends AppCompatActivity {
             }
         });
 
+        Button logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i_logout  = new Intent(getApplicationContext(), login.class);
+                mAuth.signOut();
+                Toast.makeText(settings.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+                startActivity(i_logout);
+            }
+        });
+
+        Button next = findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth = FirebaseAuth.getInstance();
+                final Switch notifications = findViewById(R.id.notifications);
+                final Switch onlywhenfree = findViewById(R.id.onlywhenfree);
+                final String email = mAuth.getCurrentUser().getEmail().toString();
+                final String add_user = returnUsername(email);
+                mDatabase.child("Users").child(add_user).child("settings").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(notifications.isChecked()){
+                            mDatabase.child("Users").child(add_user).child("settings").child("notifications").setValue(1);
+                        }
+                        else{
+                            mDatabase.child("Users").child(add_user).child("settings").child("notifications").setValue(0);
+                        }
+
+                        if(onlywhenfree.isChecked()){
+                            mDatabase.child("Users").child(add_user).child("settings").child("onlywhenfree").setValue(1);
+                        }
+                        else{
+                            mDatabase.child("Users").child(add_user).child("settings").child("onlywhenfree").setValue(0);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                Intent i_next = new Intent(getApplicationContext(), freeness.class);
+                startActivity(i_next);
+            }
+        });
+
     }
 
     @Override

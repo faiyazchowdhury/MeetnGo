@@ -37,6 +37,8 @@ public class QueryService extends Service {
     public DatabaseReference mDatabase;
     public String email, add_user;
     public ArrayList<String> free_friends = new ArrayList<String>();
+    public static final String FREE_FRIENDS_BR = "com.example.meetngo.free_friends_br";
+    Intent bi1 = new Intent(FREE_FRIENDS_BR);
     @Override
     @Nullable
     public IBinder onBind(Intent intent) {
@@ -105,8 +107,14 @@ public class QueryService extends Service {
                         String my_phone = (String) dataSnapshot.child("Users").child(add_user).child("phone").getValue();
                         for(Map.Entry<String, Object> receiver : receivers.entrySet()){
                             if(my_phone.equals(receiver.getValue().toString())){
-                                if(!free_friends.contains(notifs.get("sender").toString()) && dataSnapshot.child("Users").child(add_user).child("freeness").getValue().toString().equals("1")) {
+                                if(!free_friends.contains(notifs.get("sender").toString()) && dataSnapshot.child("Users").child(notifs.get("sender").toString()).child("freeness").getValue().toString().equals("1")) {
                                     free_friends.add(notifs.get("sender").toString());
+                                }
+                                if(dataSnapshot.child("Users").child(notifs.get("sender").toString()).child("freeness").getValue().toString().equals("0")) {
+                                    if(free_friends.contains(notifs.get("sender").toString())){
+                                        //free_friends.remove(notifs.get("sender").toString());
+                                        free_friends.clear();
+                                    }
                                 }
                             }
                         }
@@ -115,6 +123,9 @@ public class QueryService extends Service {
                         Log.i("exception", e.getMessage());
                     }
                 }
+
+                bi1.putStringArrayListExtra("free_friends",free_friends);
+                sendBroadcast(bi1);
 
                 if(!free_friends.isEmpty()) {
                     String message = "";
@@ -129,7 +140,7 @@ public class QueryService extends Service {
                         String CHANNEL_ID = "my_channel_03";
                         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                                 "My Channel",
-                                NotificationManager.IMPORTANCE_HIGH);
+                                NotificationManager.IMPORTANCE_LOW);
 
                         /*Intent intent = new Intent(getApplicationContext(), notification_tap.class);
                         intent.putStringArrayListExtra("free_friends", free_friends);

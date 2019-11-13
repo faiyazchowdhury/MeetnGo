@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -49,6 +50,7 @@ public class contacts_in_phone extends AppCompatActivity {
         TextView g_name = findViewById(R.id.group_name);
         g_name.setText(gn);
         SearchView sfilter = findViewById(R.id.searchFilter);
+        sfilter.setIconified(false);
         sfilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -141,6 +143,7 @@ public class contacts_in_phone extends AppCompatActivity {
                 }
             });
 
+
             mAuth = FirebaseAuth.getInstance();
             String email = mAuth.getCurrentUser().getEmail().toString();
             final String add_user = returnUsername(email);
@@ -151,12 +154,17 @@ public class contacts_in_phone extends AppCompatActivity {
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    for(int i=0;i<selected_name.size();i++) {
-                        if(!selected_number.get(i).isEmpty()) {
-                            mDatabase.child("Users").child(add_user).child("groups").child(gn).child(selected_name.get(i)).setValue(selected_number.get(i));
-                        }
+                    if(selected_name.isEmpty()){
+                        Toast.makeText(getApplicationContext(), "Please select atleast 1 member to add to this group!", Toast.LENGTH_SHORT).show();
                     }
-                    startActivity(i1);
+                    else {
+                        for (int i = 0; i < selected_name.size(); i++) {
+                            if (!selected_number.get(i).isEmpty()) {
+                                mDatabase.child("Users").child(add_user).child("groups").child(gn).child(selected_name.get(i)).setValue(selected_number.get(i));
+                            }
+                        }
+                        startActivity(i1);
+                    }
                 }
             });
         }

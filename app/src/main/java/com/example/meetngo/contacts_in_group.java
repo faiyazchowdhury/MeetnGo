@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 public class contacts_in_group extends AppCompatActivity {
 
@@ -61,6 +62,7 @@ public class contacts_in_group extends AppCompatActivity {
                 for(Map.Entry<String, String> entry : contacts.entrySet()){
                     arrayList.add(entry.getKey());
                 }
+                Collections.sort(arrayList);
                 arrayAdapter.notifyDataSetChanged();
             }
 

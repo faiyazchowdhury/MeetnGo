@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class groups extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.groups);
         listView.setAdapter(arrayAdapter);
         final Intent settings_intent = new Intent(this, settings.class);
-        TextView settings = findViewById(R.id.settings);
+        Button settings = findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +68,7 @@ public class groups extends AppCompatActivity {
                     for(Map.Entry<String, Object> entry : groups.entrySet()){
                         arrayList.add(entry.getKey());
                     }
+                    Collections.sort(arrayList);
                     arrayAdapter.notifyDataSetChanged();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -90,7 +92,7 @@ public class groups extends AppCompatActivity {
         });
 
         final Intent i1 = new Intent(this, create_group.class);
-        TextView cng = findViewById(R.id.newgroup);
+        Button cng = findViewById(R.id.newgroup);
         cng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

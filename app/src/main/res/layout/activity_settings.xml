@@ -49,7 +49,7 @@
         android:layout_marginStart="88dp"
         android:layout_marginLeft="88dp"
         android:layout_marginTop="164dp"
-        android:text="Only when free"
+        android:text="No Distractions*"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,8 +71,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginLeft="52dp"
         android:layout_marginTop="212dp"
-        android:text="This application requires location and contacts permissions to be enabled, please press ENABLE button and select MeetnGo from the listed apps and enable both the settings!
-        Ignore if you have already enabled both the permissions."
+        android:text="*Only get notifications when you are also free.\n\nPlease enable location and contacts permissions."
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -101,11 +100,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/next"
+        android:id="@+id/logout"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginLeft="360dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/logout_icon"
         app:layout_constraintStart_toStartOf="parent"

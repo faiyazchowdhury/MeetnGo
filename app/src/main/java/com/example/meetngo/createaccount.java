@@ -49,8 +49,8 @@ public class createaccount extends AppCompatActivity {
         });
     }
 
-    protected void create(final String email, String password, final String phone){
-        final Intent login = new Intent(this, login.class);
+    protected void create(final String email, final String password, final String phone){
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -70,7 +70,8 @@ public class createaccount extends AppCompatActivity {
 
                         }
                     });
-                    startActivity(login);
+
+                    signIn(email, password);
                 }
                 else{
                     Toast.makeText(createaccount.this, "User creation failed!", Toast.LENGTH_SHORT).show();
@@ -81,6 +82,18 @@ public class createaccount extends AppCompatActivity {
 
     public String returnUsername(String email){
         return email.substring(0, email.indexOf("@")).replaceAll("[. &#/*%$!)(^{}\\\\\\[\\]]","_");
+    }
+
+    public void signIn(String email, String password){
+        final Intent login = new Intent(this, settings.class);
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    startActivity(login);
+                }
+            }
+        });
     }
 
 }

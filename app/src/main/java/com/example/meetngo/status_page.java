@@ -12,8 +12,10 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,29 +26,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class status_page extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     int timeRemaining;
+    ArrayList<String> free_friends = new ArrayList<>();
+    ArrayAdapter<String> arrayAdapter;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_page);
         mAuth = FirebaseAuth.getInstance();
-        String email = mAuth.getCurrentUser().getEmail().toString();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        final String email = mAuth.getCurrentUser().getEmail().toString();
         Intent duration_intent = getIntent();
+        arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, free_friends);
+        listView = (ListView) findViewById(R.id.free_friends);
+        listView.setAdapter(arrayAdapter);
         timeRemaining = duration_intent.getIntExtra("timeRemaining",1);
         final Intent home = new Intent(this, freeness.class);
         Button edit = findViewById(R.id.Edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDatabase.child("Users").child(returnUsername(email)).child("freeness").setValue(0);
                 startActivity(home);
                 startLocationService(0);
                 startQueryService(0);
             }
         });
+
         startLocationService(1);
         startQueryService(1);
     }
@@ -62,12 +75,15 @@ public class status_page extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         registerReceiver(br, new IntentFilter(TimerandLocationService.COUNTDOWN_BR));
+        registerReceiver(br1, new IntentFilter(QueryService.FREE_FRIENDS_BR));
     }
 
     @Override
     public void onPause(){
         super.onPause();
         unregisterReceiver(br);
+        unregisterReceiver(br1);
+
     }
 
     @Override
@@ -120,6 +136,13 @@ public class status_page extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver br1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI1(intent);
+        }
+    };
+
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
             final Intent home = new Intent(this, freeness.class);
@@ -134,6 +157,22 @@ public class status_page extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void updateGUI1(Intent intent) {
+        ArrayList<String> temp_free_friends = new ArrayList<>();
+        temp_free_friends = intent.getStringArrayListExtra("free_friends");
+        for(int i=0;i<temp_free_friends.size();i++){
+            if(!free_friends.contains(temp_free_friends.get(i))){
+                free_friends.add(temp_free_friends.get(i));
+
+            }
+        }
+        //Toast.makeText(this, free_friends.toString(), Toast.LENGTH_SHORT).show();
+        /*if(!free_friends.contains("Brooke Brennan")){free_friends.add("Brooke Brennan");}
+        if(!free_friends.contains("Reagan Hanna")){free_friends.add("Reagan Hanna");}
+        if(!free_friends.contains("Faiyaz Chowdhury")){free_friends.add("Faiyaz Chowdhury");}*/
+        arrayAdapter.notifyDataSetChanged();
     }
 
 }

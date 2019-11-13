@@ -44,14 +44,7 @@ public class freeness extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Switch free = findViewById(R.id.freeness);
                 EditText message = findViewById(R.id.message);
-                if(free.isChecked()){
-                    f = 1;
-                }
-                else{
-                    f = 0;
-                }
                 String m = message.getText().toString();
 
                 sendValuesToDatabase(mAuth.getCurrentUser().getEmail().toString(), final_distance, final_duration, f, m);
@@ -159,16 +152,6 @@ public class freeness extends AppCompatActivity {
         mDatabase.child("Users").child(add_user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(((Long) dataSnapshot.child("freeness").getValue()).intValue() != -1){
-                    if(((Long) dataSnapshot.child("freeness").getValue()).intValue() == 1){
-                        Switch free = findViewById(R.id.freeness);
-                        free.setChecked(true);
-                    }
-                    else{
-                        Switch free = findViewById(R.id.freeness);
-                        free.setChecked(false);
-                    }
-                }
 
                 if(((Long) dataSnapshot.child("duration").getValue()).intValue() != -1){
                     SeekBar duration = findViewById(R.id.duration);
