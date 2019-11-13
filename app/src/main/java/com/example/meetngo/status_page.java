@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class status_page extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, free_friends);
         listView = (ListView) findViewById(R.id.free_friends);
         listView.setAdapter(arrayAdapter);
-        timeRemaining = duration_intent.getIntExtra("timeRemaining",1);
+        timeRemaining = duration_intent.getIntExtra("timeRemaining",60);
 
         final Intent settings_intent = new Intent(this, settings.class);
         TextView settings = findViewById(R.id.settings);
@@ -72,7 +73,7 @@ public class status_page extends AppCompatActivity {
                     Button edit = findViewById(R.id.Edit);
                     edit.setText("Send Blast");
                     TextView timer = findViewById(R.id.timer);
-                    timer.setText( "0 : 00" );
+                    timer.setText( "Send a Blast to let friends know you are free." );
                 }
             }
 
@@ -93,11 +94,11 @@ public class status_page extends AppCompatActivity {
                             Button edit = findViewById(R.id.Edit);
                             edit.setText("Send Blast");
                             TextView timer = findViewById(R.id.timer);
-                            timer.setText( "0 : 00" );
+                            timer.setText( "Send a Blast to let friends in groups know you are free." );
                         } if(!dataSnapshot.child("groups").hasChildren()) {
-                            Toast.makeText(status_page.this, "Please add groups in the groups tab.", Toast.LENGTH_SHORT).show();// Send blast
+                            Toast.makeText(status_page.this, "Please add a group in the Groups tab.", Toast.LENGTH_SHORT).show();// Send blast
 
-                        } else  {
+                        } else  { // Send Blast
                             startQueryService(0);
                             startActivity(select_groups);
                         }
@@ -108,6 +109,22 @@ public class status_page extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+
+        final Intent groups_intent = new Intent(this, groups.class);
+        TextView groups = findViewById(R.id.groups);
+        groups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(groups_intent);
+            }
+        });
+        TextView groupsBorder = findViewById(R.id.groups);
+        groupsBorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(groups_intent);
             }
         });
 
@@ -197,6 +214,7 @@ public class status_page extends AppCompatActivity {
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
             long millisUntilFinished = intent.getLongExtra("countdown", 0);
+            timeRemaining = (int) millisUntilFinished;
             TextView timer = findViewById(R.id.timer);
             int minutes = ((int) millisUntilFinished / 1000) / 60;
             int seconds = ((int) millisUntilFinished / 1000) - 60*minutes;
@@ -204,7 +222,7 @@ public class status_page extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String email = mAuth.getCurrentUser().getEmail().toString();
             final String add_user = returnUsername(email);
-            timer.setText(String.valueOf(minutes) + " : " + String.valueOf(seconds));
+            timer.setText("You're Free for " + String.valueOf(minutes) + ":" + String.valueOf(seconds));
             if(minutes == 0 && seconds == 0){
                 mDatabase.child("Users").child(add_user).child("freeness").setValue(0);
                 Toast.makeText(this, "You're freeness duration has expired", Toast.LENGTH_SHORT).show();
@@ -216,6 +234,13 @@ public class status_page extends AppCompatActivity {
     private void updateGUI1(Intent intent) {
         ArrayList<String> temp_free_friends = new ArrayList<>();
         temp_free_friends = intent.getStringArrayListExtra("free_friends");
+        if(temp_free_friends.size() == 0){
+            String message = "Oh no! No one else is free! Please spread the word about the app! You can still Send a Blast, and the chosen groups will be notified if their No Distractions setting is off. You can add groups in the Groups tab below.";
+            if(!free_friends.contains(message)){
+                free_friends.add(message);
+            }
+
+        }
         for(int i=0;i<temp_free_friends.size();i++){
             if(!free_friends.contains(temp_free_friends.get(i))){
                 free_friends.add(temp_free_friends.get(i));

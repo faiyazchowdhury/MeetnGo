@@ -88,7 +88,7 @@ public class login extends AppCompatActivity {
                                 startActivity(settings);
                             }
                             else{
-
+                                mDatabase.child("Users").child(add_user).child("freeness").setValue(0);
                                 startActivity(loginsuccess);
                             }
                         }

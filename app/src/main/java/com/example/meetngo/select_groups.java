@@ -10,7 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +40,7 @@ public class select_groups extends AppCompatActivity {
     private ArrayList<Object> members = new ArrayList<>();
     private ArrayList<Object> selected_members = new ArrayList<>();
     public int timeRemaining;
+    int final_duration=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +48,33 @@ public class select_groups extends AppCompatActivity {
         Intent duration_intent = getIntent();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        String email = mAuth.getCurrentUser().getEmail().toString();
+        final String email = mAuth.getCurrentUser().getEmail().toString();
         final String add_user = returnUsername(email);
+        getValuesFromDatabase(email);
         listView = findViewById(R.id.select_groups);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(arrayAdapter);
+
+        final SeekBar duration = findViewById(R.id.duration);
+        duration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                final_duration = i;
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                TextView dur_textview = (TextView) findViewById(R.id.duration_textview);
+                dur_textview.setText(String.valueOf(final_duration));
+            }
+        });
+
         mDatabase.child("Users").child(add_user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -152,7 +178,10 @@ public class select_groups extends AppCompatActivity {
                         }
                     });
                     mDatabase.child("Users").child(add_user).child("freeness").setValue(1);
-                    timeRemaining = 30;
+                    timeRemaining = final_duration;
+                    EditText message = findViewById(R.id.message);
+                    String m = message.getText().toString();
+                    sendValuesToDatabase(email, final_duration, m);
                     i1.putExtra("timeRemaining", timeRemaining);
                     startActivity(i1);
                 }
@@ -165,4 +194,50 @@ public class select_groups extends AppCompatActivity {
     public String returnUsername(String email){
         return email.substring(0, email.indexOf("@")).replaceAll("[. &#/*%$!)(^{}\\\\\\[\\]]","_");
     }
+
+    public void getValuesFromDatabase(String email){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String add_user = returnUsername(email);
+        mDatabase.child("Users").child(add_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(((Long) dataSnapshot.child("duration").getValue()).intValue() != -1){
+                    SeekBar duration = findViewById(R.id.duration);
+                    duration.setProgress(((Long) dataSnapshot.child("duration").getValue()).intValue());
+                    TextView dur_textview = (TextView) findViewById(R.id.duration_textview);
+                    dur_textview.setText(String.valueOf(final_duration));
+                }
+
+                if(!dataSnapshot.child("message").getValue().toString().isEmpty()){
+                    EditText message = findViewById(R.id.message);
+                    message.setText(dataSnapshot.child("message").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void sendValuesToDatabase(String email, final int duration, final String message){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        final String add_user = returnUsername(email);
+        mDatabase.child("Users").child(add_user).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mDatabase.child("Users").child(add_user).child("duration").setValue(duration);
+                mDatabase.child("Users").child(add_user).child("message").setValue(message);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 }

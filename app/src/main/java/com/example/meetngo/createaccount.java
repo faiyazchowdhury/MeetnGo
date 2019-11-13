@@ -62,7 +62,7 @@ public class createaccount extends AppCompatActivity {
                     mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            User u = new User(email, phone, 0, "",-1, -1, -1, -1, -1);
+                            User u = new User(email, phone, 0, "",0, 0, 0, 0, 0);
                             mDatabase.child("Users").child(add_user).setValue(u);
                         }
                         @Override

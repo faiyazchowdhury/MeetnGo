@@ -7,6 +7,7 @@
     android:background="@drawable/default_layout"
     tools:context=".status_page">
 
+
     <Button
         android:id="@+id/settings"
         android:layout_width="35dp"
@@ -20,11 +21,11 @@
 
     <TextView
         android:id="@+id/timer"
-        android:layout_width="118dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
-        android:layout_marginTop="184dp"
+        android:layout_width="306dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="176dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="25sp"
@@ -43,6 +44,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
+    <Button
+        android:id="@+id/letzChillBorder"
+        android:layout_width="207dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="638dp"
+        android:background="@drawable/square_tab_chosen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/groupsBorder"
+        android:layout_width="207dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="638dp"
+        android:layout_marginStart="207dp"
+        android:layout_marginLeft="207dp"
+        android:background="@drawable/square_tab_chosen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/letzChill"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="645dp"
+        android:background="@drawable/logo_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/groups"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="276dp"
+        android:layout_marginLeft="276dp"
+        android:layout_marginTop="645dp"
+        android:background="@drawable/groups_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
@@ -56,8 +102,8 @@
 
     <ListView
         android:id="@+id/free_friends"
-        android:layout_width="389dp"
-        android:layout_height="270dp"
+        android:layout_width="386dp"
+        android:layout_height="254dp"
         android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
         android:layout_marginTop="393dp"

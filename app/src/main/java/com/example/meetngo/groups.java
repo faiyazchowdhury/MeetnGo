@@ -100,18 +100,19 @@ public class groups extends AppCompatActivity {
             }
         });
 
-        final Intent i2 = new Intent(this, select_groups.class);
-        Button next = findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
+        final Intent status_page_intent = new Intent(this, status_page.class);
+        TextView letzChill = findViewById(R.id.letzChill);
+        letzChill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!arrayList.get(0).equals("You don't have any groups yet!")) {
-                    i2.putExtra("timeRemaining", timeRemaining);
-                    startActivity(i2);
-                }
-                else{
-                    Toast.makeText(groups.this, "Please create a group first!", Toast.LENGTH_SHORT).show();
-                }
+                startActivity(status_page_intent);
+            }
+        });
+        TextView letzChillBorder = findViewById(R.id.letzChillBorder);
+        letzChillBorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(status_page_intent);
             }
         });
     }
@@ -120,14 +121,5 @@ public class groups extends AppCompatActivity {
         return email.substring(0, email.indexOf("@")).replaceAll("[. &#/*%$!)(^{}\\\\\\[\\]]","_");
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Intent logout = new Intent(this, freeness.class);
-        mAuth = FirebaseAuth.getInstance();
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            startActivity(logout);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
 }
