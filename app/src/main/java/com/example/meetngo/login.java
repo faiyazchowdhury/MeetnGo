@@ -72,7 +72,7 @@ public class login extends AppCompatActivity {
     }
 
     protected void login1(final String email, String password){
-        final Intent loginsuccess = new Intent(this, freeness.class);
+        final Intent loginsuccess = new Intent(this, status_page.class);
         final Intent settings = new Intent(this, com.example.meetngo.settings.class);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -88,6 +88,7 @@ public class login extends AppCompatActivity {
                                 startActivity(settings);
                             }
                             else{
+
                                 startActivity(loginsuccess);
                             }
                         }

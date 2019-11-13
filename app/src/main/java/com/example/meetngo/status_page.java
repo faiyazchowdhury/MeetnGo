@@ -48,20 +48,71 @@ public class status_page extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.free_friends);
         listView.setAdapter(arrayAdapter);
         timeRemaining = duration_intent.getIntExtra("timeRemaining",1);
-        final Intent home = new Intent(this, freeness.class);
-        Button edit = findViewById(R.id.Edit);
-        edit.setOnClickListener(new View.OnClickListener() {
+
+        final Intent settings_intent = new Intent(this, settings.class);
+        TextView settings = findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mDatabase.child("Users").child(returnUsername(email)).child("freeness").setValue(0);
-                startActivity(home);
-                startLocationService(0);
-                startQueryService(0);
+            public void onClick(View view) {
+                startActivity(settings_intent);
             }
         });
 
-        startLocationService(1);
+        final Intent select_groups = new Intent(this, select_groups.class);
+        Button edit = findViewById(R.id.Edit);
+        mDatabase.child("Users").child(returnUsername(email)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("freeness").getValue().toString().equals("1")){ // If Free
+                    Button edit = findViewById(R.id.Edit);
+                    edit.setText("Not free anymore");
+                    startLocationService(1);
+                }
+                else{ // If not free
+                    Button edit = findViewById(R.id.Edit);
+                    edit.setText("Send Blast");
+                    TextView timer = findViewById(R.id.timer);
+                    timer.setText( "0 : 00" );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.child("Users").child(returnUsername(email)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.child("freeness").getValue().toString().equals("1")){ // If Free (Not free Anymore)
+                            startLocationService(0);
+                            mDatabase.child("Users").child(returnUsername(email)).child("freeness").setValue(0);
+                            Button edit = findViewById(R.id.Edit);
+                            edit.setText("Send Blast");
+                            TextView timer = findViewById(R.id.timer);
+                            timer.setText( "0 : 00" );
+                        } if(!dataSnapshot.child("groups").hasChildren()) {
+                            Toast.makeText(status_page.this, "Please add groups in the groups tab.", Toast.LENGTH_SHORT).show();// Send blast
+
+                        } else  {
+                            startQueryService(0);
+                            startActivity(select_groups);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
         startQueryService(1);
+
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -145,15 +196,18 @@ public class status_page extends AppCompatActivity {
 
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
-            final Intent home = new Intent(this, freeness.class);
             long millisUntilFinished = intent.getLongExtra("countdown", 0);
             TextView timer = findViewById(R.id.timer);
             int minutes = ((int) millisUntilFinished / 1000) / 60;
             int seconds = ((int) millisUntilFinished / 1000) - 60*minutes;
+            mAuth = FirebaseAuth.getInstance();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            String email = mAuth.getCurrentUser().getEmail().toString();
+            final String add_user = returnUsername(email);
             timer.setText(String.valueOf(minutes) + " : " + String.valueOf(seconds));
             if(minutes == 0 && seconds == 0){
+                mDatabase.child("Users").child(add_user).child("freeness").setValue(0);
                 Toast.makeText(this, "You're freeness duration has expired", Toast.LENGTH_SHORT).show();
-                startActivity(home);
             }
         }
 

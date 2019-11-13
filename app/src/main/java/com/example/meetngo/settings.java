@@ -109,7 +109,7 @@ public class settings extends AppCompatActivity {
 
                     }
                 });
-                Intent i_next = new Intent(getApplicationContext(), freeness.class);
+                Intent i_next = new Intent(getApplicationContext(), status_page.class);
                 startActivity(i_next);
             }
         });
@@ -118,7 +118,7 @@ public class settings extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Intent back = new Intent(this, freeness.class);
+        Intent back = new Intent(this, status_page.class);
         mAuth = FirebaseAuth.getInstance();
         if(keyCode == KeyEvent.KEYCODE_BACK){
 

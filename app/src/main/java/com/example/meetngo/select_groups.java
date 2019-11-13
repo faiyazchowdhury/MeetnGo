@@ -136,7 +136,6 @@ public class select_groups extends AppCompatActivity {
                                 String message = (String) dataSnapshot.child("Users").child(add_user).child("message").getValue();
                                 mDatabase.child("Notifications").child("num").setValue(i);
                                 mDatabase.child("Notifications").child("n" + i).child("sender").setValue(add_user);
-
                                 mDatabase.child("Notifications").child("n" + i).child("distance").setValue(distance);
                                 mDatabase.child("Notifications").child("n" + i).child("duration").setValue(duration);
                                 mDatabase.child("Notifications").child("n" + i).child("message").setValue(message);
@@ -153,6 +152,7 @@ public class select_groups extends AppCompatActivity {
                         }
                     });
                     mDatabase.child("Users").child(add_user).child("freeness").setValue(1);
+                    timeRemaining = 30;
                     i1.putExtra("timeRemaining", timeRemaining);
                     startActivity(i1);
                 }
