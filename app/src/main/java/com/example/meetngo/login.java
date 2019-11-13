@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,7 +79,6 @@ public class login extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(login.this, "Signed in successfully!", Toast.LENGTH_SHORT).show();
                     final String add_user = returnUsername(email);
                     mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -108,6 +108,18 @@ public class login extends AppCompatActivity {
 
     public String returnUsername(String email){
         return email.substring(0, email.indexOf("@")).replaceAll("[. &#/*%$!)(^{}\\\\\\[\\]]","_");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Intent intent = new Intent(this, login.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            //startActivity(intent);
+            moveTaskToBack(true);
+            //finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

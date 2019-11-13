@@ -7,38 +7,25 @@
     android:background="@drawable/default_layout"
     tools:context=".select_groups">
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="366dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="52dp"
-        android:text="Tap all the groups with whose members you want to hangout with"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
         android:id="@+id/select_groups"
-        android:layout_width="390dp"
-        android:layout_height="360dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="125dp"
+        android:layout_width="376dp"
+        android:layout_height="219dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="216dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginLeft="160dp"
-        android:layout_marginTop="512dp"
-        android:text="Done"
-        android:background="@drawable/square_input"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginLeft="168dp"
+        android:layout_marginTop="444dp"
+        android:background="@drawable/send_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

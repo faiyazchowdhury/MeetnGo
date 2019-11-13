@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 public class contacts_in_group extends AppCompatActivity {
 
@@ -42,6 +44,14 @@ public class contacts_in_group extends AppCompatActivity {
         final Intent cig = getIntent();
         final String gn = cig.getStringExtra("group_name");
         final Intent cip = new Intent(this, contacts_in_phone.class);
+        final Intent next = new Intent(this, select_groups.class);
+        Button next_button = findViewById(R.id.next);
+        next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(next);
+            }
+        });
         cip.putExtra("group_name", gn);
         TextView group_name = findViewById(R.id.groupname);
         group_name.setText(gn);
@@ -52,6 +62,7 @@ public class contacts_in_group extends AppCompatActivity {
                 for(Map.Entry<String, String> entry : contacts.entrySet()){
                     arrayList.add(entry.getKey());
                 }
+                Collections.sort(arrayList);
                 arrayAdapter.notifyDataSetChanged();
             }
 

@@ -11,23 +11,30 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/letz_chill_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".status_page"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".select_groups"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".delete_members"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".create_group"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".contacts_in_phone"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".contacts_in_group"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".settings"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".status_page"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".select_groups"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".delete_members"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".create_group"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".contacts_in_phone"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".contacts_in_group"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".groups"
             android:screenOrientation="portrait" />
@@ -52,8 +59,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".TimerandLocationService"/>
-        <service android:name=".QueryService"/>
+
+        <service android:name=".TimerandLocationService" />
+        <service android:name=".QueryService" />
     </application>
 
 </manifest>
